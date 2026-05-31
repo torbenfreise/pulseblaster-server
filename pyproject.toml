@@ -1,0 +1,35 @@
+[project]
+name = "h2pcontrol-pulseblaster-server"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "grpcio>=1.80.0",
+    "beyer-labs-h2pcontrol-grpc-python==1.81.0.1.dev0+823091433a37",
+    "beyer-labs-h2pcontrol-protocolbuffers-pyi==35.0.0.1.dev0+823091433a37",
+    "beyer-labs-h2pcontrol-protocolbuffers-python==35.0.0.1.dev0+823091433a37",
+    "beyer-labs-h2pcontrol-community-nipunn1313-mypy==5.1.0.1.dev0+823091433a37",
+    "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc==5.1.0.1.dev0+823091433a37",
+    "h2pcontrol-sdk",
+    "matplotlib",
+]
+
+[dependency-groups]
+dev = [
+    "ruff==0.15.11",
+    "pyright>=1.1.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[[tool.uv.index]]
+url = "https://buf.build/gen/python"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.uv.sources]
+h2pcontrol-sdk = { git = "https://github.com/torbenfreise/h2pcontrol-sdk", rev = "0.2.2" }
+
+[tool.uv]
+override-dependencies = ["protobuf>=7.34.1"]
