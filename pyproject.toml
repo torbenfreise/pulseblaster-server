@@ -4,11 +4,11 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "grpcio>=1.80.0",
-    "beyer-labs-h2pcontrol-grpc-python==1.81.0.1.dev0+823091433a37",
-    "beyer-labs-h2pcontrol-protocolbuffers-pyi==35.0.0.1.dev0+823091433a37",
-    "beyer-labs-h2pcontrol-protocolbuffers-python==35.0.0.1.dev0+823091433a37",
-    "beyer-labs-h2pcontrol-community-nipunn1313-mypy==5.1.0.1.dev0+823091433a37",
-    "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc==5.1.0.1.dev0+823091433a37",
+    "beyer-labs-h2pcontrol-grpc-python>=1.81.0.1",
+    "beyer-labs-h2pcontrol-protocolbuffers-pyi>=35.0",
+    "beyer-labs-h2pcontrol-protocolbuffers-python>=35.0.0",
+    "beyer-labs-h2pcontrol-community-nipunn1313-mypy>=5.1.0",
+    "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc>=5.1.0",
     "h2pcontrol-sdk",
     "matplotlib",
 ]
