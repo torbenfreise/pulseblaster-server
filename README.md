@@ -13,6 +13,7 @@ This project has been adapted from the [h2pcontrol-server-template](https://gith
 
 - Python 3.12+
 - [uv](https://docs.astral.sh/uv/)
+- [spinapi](https://www.spincore.com/support/spinapi/)
 
 ## Quick Start
 
