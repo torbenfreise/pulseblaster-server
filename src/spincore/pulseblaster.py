@@ -113,23 +113,23 @@ class Instruction:
         )
 
 
-def program(self):
-    """
-    Programs the instruction onto the currently selected board
+    def program(self):
+        """
+        Programs the instruction onto the currently selected board
 
-    Parameters
-    ----------
-    None
+        Parameters
+        ----------
+        None
 
-    Returns
-    -------
-    None
-    """
+        Returns
+        -------
+        None
+        """
 
-    rc = spinapi.pb_inst_pbonly(self.flags, self.inst, self.inst_data, self.length)
-    if rc < 0:
-        raise PulseBlasterError(f"pb_inst failed ({rc}): {spinapi.pb_get_error()}")
-    return rc
+        rc = spinapi.pb_inst_pbonly(self.flags, self.inst, self.inst_data, self.length)
+        if rc < 0:
+            raise PulseBlasterError(f"pb_inst failed ({rc}): {spinapi.pb_get_error()}")
+        return rc
 
 
 class PulseBlasterError(Exception):
