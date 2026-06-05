@@ -23,4 +23,4 @@ uv run src/main.py
 
 ## Usage
 
-Consult the [h2pcontrol Buf Schema Registry](https://buf.build/beyer-labs/h2pcontrol) to see the procedures implemented by this service.
+The protobuf contract implemented by this service can be found [here](https://buf.build/beyer-labs/h2pcontrol/docs/main%3Ah2pcontrol.pulseblaster.v1)
