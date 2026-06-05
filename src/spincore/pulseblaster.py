@@ -242,6 +242,8 @@ class PulseBlaster:
         if spinapi.pb_init() != 0:
             raise PulseBlasterError(f"Failed to initialize: {spinapi.pb_get_error()}")
 
+        spinapi.pb_set_debug(1)
+
         # Set member variables
         self.channels, self.clock, self.memory = self._match_firmware()
         self.board_number = board_number
