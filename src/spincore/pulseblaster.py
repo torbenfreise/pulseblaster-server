@@ -112,7 +112,6 @@ class Instruction:
             f"{self.inst_data} | {self.length} ns"
         )
 
-
     def program(self):
         """
         Programs the instruction onto the currently selected board
