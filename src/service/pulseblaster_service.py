@@ -79,7 +79,7 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
                 for instruction in request.instructions.instructions:
                     self.pb.add_inst(
                         flags=instruction.flags,
-                        inst=instruction.op_code,
+                        inst=instruction.op_code - 1,
                         inst_data=instruction.inst_data,
                         length=instruction.duration_ns,
                     )
