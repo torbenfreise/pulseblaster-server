@@ -11,6 +11,7 @@ dependencies = [
     "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc>=5.1.0",
     "h2pcontrol-sdk",
     "matplotlib",
+    "h2pcontrol-daq",
 ]
 
 [dependency-groups]
@@ -30,6 +31,7 @@ select = ["E", "F", "I"]
 
 [tool.uv.sources]
 h2pcontrol-sdk = { git = "https://github.com/torbenfreise/h2pcontrol-sdk", rev = "0.2.2" }
+h2pcontrol-daq = { git = "https://github.com/iic201/h2pcontrol-daq.git", subdirectory = "lib", rev = "v1.1.2" }
 
 [tool.uv]
 override-dependencies = ["protobuf>=7.34.1"]

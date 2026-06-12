@@ -20,12 +20,17 @@ from h2pcontrol.pulseblaster.v1.pulseblaster_pb2 import (
 )
 from h2pcontrol.pulseblaster.v1.pulseblaster_pb2_grpc import PulseBlasterServiceServicer
 from h2pcontrol.sdk.server import Server, ServerConfig
+from h2pcontrol_daq import (
+    DAQSaveFormat,
+    LocalDAQ,
+)
 
 from spincore import spinapi
 from spincore.pulseblaster import PulseBlaster, PulseBlasterError
 
 logger = logging.getLogger(__name__)
 
+daq = LocalDAQ()
 
 def handle_pb_errors(method):
     @functools.wraps(method)
@@ -83,11 +88,29 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
                         inst_data=instruction.inst_data,
                         length=instruction.duration_ns,
                     )
+                    daq.commit(
+                        source="pb_instruction",
+                        data={
+                            "flags": instruction.flags, 
+                            "inst": instruction.op_code - 1, 
+                            "inst_data": instruction.inst_data, 
+                            "length": instruction.duration_ns
+                        },
+                        save_format=DAQSaveFormat.CSV,
+                    )
             case "channels":
                 for sequence in request.channels.sequences:
                     self.pb.set_channel(
                         sequence.channel,
                         [(pulse.high, pulse.duration_ns) for pulse in sequence.pulses],
+                    )
+                    daq.commit(
+                        source="pb_channel",
+                        data={
+                            "channel": sequence.channel,
+                            "pulses": [(pulse.high, pulse.duration_ns) for pulse in sequence.pulses]
+                        },
+                        save_format=DAQSaveFormat.CSV,
                     )
                 self.pb.compile_channels()
         self.pb.program()

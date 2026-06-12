@@ -3,7 +3,7 @@ import logging
 
 from h2pcontrol.sdk.server import ServerConfig
 
-from service import PulseBlasterService
+from service import PulseBlasterService, daq
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +16,12 @@ logger = logging.getLogger(__name__)
 async def main():
     cfg = ServerConfig.load()
     svc = PulseBlasterService(cfg)
-    await svc.start()
+    await daq.start()
+    try:
+        await svc.start()
+    finally:
+        await daq.stop()
+
 
 
 if __name__ == "__main__":
