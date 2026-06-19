@@ -29,11 +29,14 @@ and automatic firmware reading. Errors are also reported instantly,
 without having to check the debug log
 """
 
+import logging
 from collections import deque
 
 import matplotlib.pyplot as plt
 
 from spincore import spinapi
+
+logger = logging.getLogger(__name__)
 
 
 class Instruction:
@@ -264,7 +267,7 @@ class PulseBlaster:
     def __del__(self):
         """Closes the PulseBlaster board upon object deletion."""
         spinapi.pb_close()
-        print("Closed PulseBlaster board.")
+        logger.info("Closed PulseBlaster board")
 
     # Start the PulseBlaster board
     def start(self):
@@ -273,7 +276,7 @@ class PulseBlaster:
             raise PulseBlasterError(
                 f"Failed to start PulseBlaster program: {spinapi.pb_get_error()}"
             )
-        print("PulseBlaster program has been started.")
+        logger.info("PulseBlaster program started")
         self.running = True
 
     # Reset the PulseBlaster board
@@ -283,7 +286,7 @@ class PulseBlaster:
             raise PulseBlasterError(
                 f"Failed to reset PulseBlaster program: {spinapi.pb_get_error()}"
             )
-        print("PulseBlaster board has been reset.")
+        logger.info("PulseBlaster board reset")
         self.running = True
 
     # Stop the PuleBlaster board
@@ -293,7 +296,7 @@ class PulseBlaster:
             raise PulseBlasterError(
                 f"Failed to stop PulseBlaster program: {spinapi.pb_get_error()}"
             )
-        print("PulseBlaster board has been stopped.")
+        logger.info("PulseBlaster board stopped")
         self.running = False
 
     # Add new instruction
@@ -315,17 +318,18 @@ class PulseBlaster:
 
     # Prints the status of the board
     def status(self):
-        """Prints the current status of the PulseBlaster board"""
+        """Logs the current status of the PulseBlaster board."""
         s = spinapi.pb_read_status()
-        print("Current state of PulseBlaster board:")
+        states = []
         if s & 1:
-            print("Stopped")
+            states.append("Stopped")
         if s & 2:
-            print("Reset")
+            states.append("Reset")
         if s & 4:
-            print("Running")
+            states.append("Running")
         if s & 8:
-            print("Waiting")
+            states.append("Waiting")
+        logger.info("Board status: %s", ", ".join(states) if states else "Unknown")
 
     # Program the board with current instruction queue
     def program(self):
@@ -334,9 +338,12 @@ class PulseBlaster:
         This sends the instruction queue to the hardware and clears the queue.
         """
         # Validate number of instructions
-        if len(self.instructions) > self.memory:
-            print("Warning: Too many instructions")
-            input("Please press a key to continue. ")
+        num_instructions = len(self.instructions)
+        if num_instructions > self.memory:
+            self.instructions.clear()
+            raise PulseBlasterError(
+                f"Too many instructions: {num_instructions} exceeds memory limit of {self.memory}"
+            )
         # Error check pb_start_programming() call
         if spinapi.pb_start_programming(spinapi.PULSE_PROGRAM) != 0:
             raise PulseBlasterError(
@@ -364,22 +371,17 @@ class PulseBlaster:
         """
         # Validate channel number
         if channel < 0 or channel >= self.channels:
-            print("Error: Invalid channel specified")
-            input("Please press a key to continue. ")
-            self.exit()
+            raise InvalidChannelError(
+                f"Invalid channel {channel}: must be between 0 and {self.channels - 1}"
+            )
+        # Validate all values before appending any
         for val, duration in values:
-            # Validate logical value
             if val not in (1, 0):
-                print("Error: Channel values must be a 1 or a 0")
-                input("Please press a key to continue. ")
-                self.exit()
-            # Validate duration (needs actual board-specific limits)
+                raise PulseBlasterError(f"Channel values must be 0 or 1, got {val}")
             if duration <= 0:
-                print("Error: Invalid pulse duration")
-                input("Please press a key to continue. ")
-                self.exit()
-            # Add to channel queue
-            self.queues[channel].append((val, duration))
+                raise PulseBlasterError(f"Invalid pulse duration: {duration} ns")
+        # All valid — append to queue
+        self.queues[channel].extend(values)
 
     # Plot patterns generated using 'set_channel()' function
     def visualize_channels(self, *args):
@@ -397,8 +399,7 @@ class PulseBlaster:
             # Validate channels
             for channel in args:
                 if channel not in range(self.channels) or not self.queues[channel]:
-                    print("Error: Invalid channel specified")
-                    input("Please press a key to continue. ")
+                    raise InvalidChannelError(f"Invalid or unprogrammed channel: {channel}")
             channels = args
             num_channels = len(args)
         # If no channels are given as arguemnts, plot all channels that have been programmed
@@ -581,7 +582,3 @@ class PulseBlaster:
                 return (24, 500.0, 4096)
             case _:
                 raise FirmwareMismatchError("Unkown Firmware")
-
-    def exit(self):
-        if self.running:
-            self.stop()

@@ -306,7 +306,7 @@ requires-dist = [
     { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi", specifier = ">=35.0" },
     { name = "beyer-labs-h2pcontrol-protocolbuffers-python", specifier = ">=35.0.0" },
     { name = "grpcio", specifier = ">=1.80.0" },
-    { name = "h2pcontrol-sdk", git = "https://github.com/torbenfreise/h2pcontrol-sdk?rev=0.2.2" },
+    { name = "h2pcontrol-sdk", git = "https://github.com/torbenfreise/h2pcontrol-sdk?rev=0.2.5" },
     { name = "matplotlib" },
 ]
 
@@ -318,9 +318,11 @@ dev = [
 
 [[package]]
 name = "h2pcontrol-sdk"
-version = "0.2.2"
-source = { git = "https://github.com/torbenfreise/h2pcontrol-sdk?rev=0.2.2#8c78871104bda23b333754c197024ec96184a4f6" }
+version = "0.2.5"
+source = { git = "https://github.com/torbenfreise/h2pcontrol-sdk?rev=0.2.5#df274b96a20e8121c458cc0cc260d4d28a06096a" }
 dependencies = [
+    { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy" },
+    { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc" },
     { name = "beyer-labs-h2pcontrol-grpc-python" },
     { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi" },
     { name = "beyer-labs-h2pcontrol-protocolbuffers-python" },

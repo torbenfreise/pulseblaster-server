@@ -1,5 +1,5 @@
 [manager]
-address = "100.87.99.20:50051"
+address = "127.0.0.1:50051"
 retry_interval_s = 5
 
 [service]
