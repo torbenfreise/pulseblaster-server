@@ -33,6 +33,7 @@ def handle_pb_errors(method):
         try:
             return await method(self, request, context)
         except PulseBlasterError as e:
+            logger.error("PulseBlaster error in %s: %s", method.__name__, e)
             await context.abort(grpc.StatusCode.INTERNAL, str(e))
 
     return wrapper
@@ -74,8 +75,11 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
 
     @handle_pb_errors
     async def Program(self, request: ProgramRequest, context):
-        match request.WhichOneof("program"):
+        program_type = request.WhichOneof("program")
+        match program_type:
             case "instructions":
+                num_instructions = len(request.instructions.instructions)
+                logger.info("Programming %d instructions", num_instructions)
                 for instruction in request.instructions.instructions:
                     self.pb.add_inst(
                         flags=instruction.flags,
@@ -84,6 +88,8 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
                         length=instruction.duration_ns,
                     )
             case "channels":
+                num_channels = len(request.channels.sequences)
+                logger.info("Programming %d channel sequences", num_channels)
                 for sequence in request.channels.sequences:
                     self.pb.set_channel(
                         sequence.channel,
@@ -91,6 +97,7 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
                     )
                 self.pb.compile_channels()
         self.pb.program()
+        logger.info("Board programmed successfully via %s", program_type)
         return ProgramResponse()
 
     @handle_pb_errors
