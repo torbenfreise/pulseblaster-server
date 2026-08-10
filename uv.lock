@@ -3,7 +3,10 @@ revision = 3
 requires-python = ">=3.12"
 
 [manifest]
-overrides = [{ name = "protobuf", specifier = ">=7.34.1" }]
+overrides = [
+    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi", marker = "sys_platform == 'no-such-platform'" },
+    { name = "protobuf", specifier = ">=7.34.1" },
+]
 
 [[package]]
 name = "annotated-types"
@@ -70,7 +73,7 @@ name = "beyer-labs-h2pcontrol-protocolbuffers-python"
 version = "35.1.0.1.20260617172830+652592802210"
 source = { registry = "https://buf.build/gen/python" }
 dependencies = [
-    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi" },
+    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi", marker = "sys_platform == 'no-such-platform'" },
     { name = "protobuf" },
 ]
 wheels = [
@@ -285,7 +288,7 @@ dependencies = [
     { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy" },
     { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc" },
     { name = "beyer-labs-h2pcontrol-grpc-python" },
-    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi" },
+    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi", marker = "sys_platform == 'no-such-platform'" },
     { name = "beyer-labs-h2pcontrol-protocolbuffers-python" },
     { name = "grpcio" },
     { name = "h2pcontrol-sdk" },
@@ -324,7 +327,7 @@ dependencies = [
     { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy" },
     { name = "beyer-labs-h2pcontrol-community-nipunn1313-mypy-grpc" },
     { name = "beyer-labs-h2pcontrol-grpc-python" },
-    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi" },
+    { name = "beyer-labs-h2pcontrol-protocolbuffers-pyi", marker = "sys_platform == 'no-such-platform'" },
     { name = "beyer-labs-h2pcontrol-protocolbuffers-python" },
     { name = "grpcio" },
     { name = "protobuf" },
