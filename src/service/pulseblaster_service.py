@@ -45,6 +45,10 @@ class PulseBlasterService(Server, PulseBlasterServiceServicer):
         self.pb = PulseBlaster()
 
     def _healthy(self) -> bool:
+        status = spinapi.pb_read_status()
+        if status < 0:
+            logger.error("Board status read failed: %s", spinapi.pb_get_error())
+            return False
         return True
 
     @handle_pb_errors
